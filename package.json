@@ -1,0 +1,28 @@
+{
+  "name": "skillbridge-ai",
+  "version": "1.0.0",
+  "description": "SkillBridge AI — AI-powered career guidance and skill gap analysis platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n client,server -c blue,green \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "lint": "cd client && npm run lint",
+    "start:server": "cd server && npm start"
+  },
+  "keywords": [
+    "skillbridge",
+    "career-guidance",
+    "ai",
+    "skill-gap",
+    "pmkvy"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  }
+}
