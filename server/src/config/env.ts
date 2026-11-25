@@ -9,4 +9,7 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV || "development",
   MONGODB_URI: process.env.MONGODB_URI || "",
   CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000",
+  // Clerk — read by @clerk/express automatically from process.env
+  // CLERK_SECRET_KEY must be set in .env (never committed)
+  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY || "",
 } as const;

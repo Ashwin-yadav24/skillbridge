@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiClient } from "@/services/api-client";
 import type { HealthResponse } from "@/types/api";
 import { CheckCircle, XCircle, Loader2, Server } from "lucide-react";
 
@@ -16,15 +15,17 @@ export function ApiStatus() {
     const checkHealth = async () => {
       try {
         setState("loading");
-        const response = await apiClient.get<HealthResponse>("/api/health");
-        setData(response);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001"}/api/health`
+        );
+        const json = (await res.json()) as HealthResponse;
+        setData(json);
         setState("connected");
       } catch (err) {
         setError(err instanceof Error ? err.message : "Connection failed");
         setState("error");
       }
     };
-
     checkHealth();
   }, []);
 
@@ -35,20 +36,11 @@ export function ApiStatus() {
         <h3 className="text-lg font-bold text-[var(--sb-navy)]">
           Development Status
         </h3>
-        <span className="label-tech text-[var(--sb-secondary-text)]">
-          Phase 1
-        </span>
+        <span className="label-tech text-[var(--sb-secondary-text)]">Phase 1</span>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">
-        {/* Frontend */}
-        <StatusItem
-          label="Frontend"
-          status="connected"
-          detail="Next.js running on :3000"
-        />
-
-        {/* Backend */}
+        <StatusItem label="Frontend" status="connected" detail="Next.js running on :3000" />
         <StatusItem
           label="Backend API"
           status={state}
@@ -56,12 +48,10 @@ export function ApiStatus() {
             state === "connected"
               ? `${data?.message} (${data?.environment})`
               : state === "error"
-              ? error ?? "Connection failed"
+              ? (error ?? "Connection failed")
               : "Checking connection…"
           }
         />
-
-        {/* Database */}
         <StatusItem
           label="Database"
           status={
@@ -79,13 +69,7 @@ export function ApiStatus() {
               : "Waiting for API…"
           }
         />
-
-        {/* TypeScript */}
-        <StatusItem
-          label="TypeScript"
-          status="connected"
-          detail="Strict mode enabled"
-        />
+        <StatusItem label="TypeScript" status="connected" detail="Strict mode enabled" />
       </div>
     </div>
   );
@@ -118,4 +102,3 @@ function StatusItem({
     </div>
   );
 }
-

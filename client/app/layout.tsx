@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -22,11 +23,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${plusJakarta.variable} ${spaceMono.variable} h-full antialiased`}
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorPrimary: "#0878F9",
+          colorBackground: "#FFFCF5",
+          borderRadius: "0.75rem",
+          fontFamily: "var(--font-sans)",
+        },
+      }}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
+      <html
+        lang="en"
+        className={`${plusJakarta.variable} ${spaceMono.variable} h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col">{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

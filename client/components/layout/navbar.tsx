@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { BrainCircuit, Menu, X } from "lucide-react";
+import { BrainCircuit, Menu, X, LogOut, User, LayoutDashboard } from "lucide-react";
+import { useAuth, useUser, SignOutButton } from "@clerk/nextjs";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -14,6 +15,13 @@ const navLinks = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const { isSignedIn, isLoaded } = useAuth();
+  const { user } = useUser();
+
+  const initials = user?.fullName
+    ? user.fullName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user?.emailAddresses?.[0]?.emailAddress?.slice(0, 2).toUpperCase() ?? "U";
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-2 border-[var(--sb-navy)] bg-white/95 backdrop-blur">
@@ -39,20 +47,88 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop auth area */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/sign-in"
-            className="label-nav text-[var(--sb-secondary-text)] hover:text-[var(--sb-navy)] transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href="/sign-up"
-            className="inline-flex items-center rounded-xl border-2 border-[var(--sb-navy)] bg-[var(--sb-blue)] px-5 py-2 text-sm font-semibold text-white shadow-navy-sm hover:bg-[var(--sb-blue-hover)] transition-colors"
-          >
-            Get Started
-          </Link>
+          {!isLoaded ? (
+            <div className="w-20 h-8 bg-gray-100 rounded-xl animate-pulse" />
+          ) : isSignedIn ? (
+            /* ── Signed-in state ── */
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                className="flex items-center gap-2 rounded-xl border-2 border-[var(--sb-navy)] bg-[var(--sb-card)] px-3 py-1.5 hover:bg-gray-50 transition-colors"
+              >
+                {user?.imageUrl ? (
+                  <img
+                    src={user.imageUrl}
+                    alt={user.fullName ?? "User"}
+                    className="h-7 w-7 rounded-full object-cover border border-[var(--sb-navy)]"
+                  />
+                ) : (
+                  <div className="h-7 w-7 rounded-full bg-[var(--sb-blue)] flex items-center justify-center">
+                    <span className="text-xs font-bold text-white">{initials}</span>
+                  </div>
+                )}
+                <span className="text-sm font-semibold text-[var(--sb-navy)]">
+                  {user?.firstName ?? user?.emailAddresses?.[0]?.emailAddress?.split("@")[0]}
+                </span>
+              </button>
+
+              {/* Dropdown */}
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white border-2 border-[var(--sb-navy)] rounded-xl shadow-navy-sm z-50 overflow-hidden">
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-xs font-semibold text-[var(--sb-navy)] truncate">
+                      {user?.fullName ?? "User"}
+                    </p>
+                    <p className="text-xs text-[var(--sb-secondary-text)] truncate">
+                      {user?.emailAddresses?.[0]?.emailAddress}
+                    </p>
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[var(--sb-navy)] hover:bg-[var(--sb-cream)] transition-colors"
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/profile"
+                    onClick={() => setUserMenuOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[var(--sb-navy)] hover:bg-[var(--sb-cream)] transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    My Profile
+                  </Link>
+                  <div className="border-t border-gray-100">
+                    <SignOutButton redirectUrl="/">
+                      <button className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-[var(--sb-red)] hover:bg-[var(--sb-red)]/5 transition-colors">
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                      </button>
+                    </SignOutButton>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* ── Signed-out state ── */
+            <>
+              <Link
+                href="/sign-in"
+                className="label-nav text-[var(--sb-secondary-text)] hover:text-[var(--sb-navy)] transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center rounded-xl border-2 border-[var(--sb-navy)] bg-[var(--sb-blue)] px-5 py-2 text-sm font-semibold text-white shadow-navy-sm hover:bg-[var(--sb-blue-hover)] transition-colors"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -79,13 +155,29 @@ export function Navbar() {
             </Link>
           ))}
           <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
-            <Link href="/sign-in" className="text-sm font-semibold text-[var(--sb-navy)]">Login</Link>
-            <Link
-              href="/sign-up"
-              className="inline-flex justify-center rounded-xl border-2 border-[var(--sb-navy)] bg-[var(--sb-blue)] px-5 py-2 text-sm font-semibold text-white"
-            >
-              Get Started
-            </Link>
+            {isSignedIn ? (
+              <>
+                <Link href="/dashboard" onClick={() => setOpen(false)} className="text-sm font-semibold text-[var(--sb-navy)]">
+                  Dashboard
+                </Link>
+                <Link href="/profile" onClick={() => setOpen(false)} className="text-sm font-semibold text-[var(--sb-navy)]">
+                  My Profile
+                </Link>
+                <SignOutButton redirectUrl="/">
+                  <button className="text-left text-sm font-semibold text-[var(--sb-red)]">Sign Out</button>
+                </SignOutButton>
+              </>
+            ) : (
+              <>
+                <Link href="/sign-in" className="text-sm font-semibold text-[var(--sb-navy)]">Login</Link>
+                <Link
+                  href="/sign-up"
+                  className="inline-flex justify-center rounded-xl border-2 border-[var(--sb-navy)] bg-[var(--sb-blue)] px-5 py-2 text-sm font-semibold text-white"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
