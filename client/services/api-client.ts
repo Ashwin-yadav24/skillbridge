@@ -80,6 +80,104 @@ export interface UpdateUserPayload {
 
 // ── User endpoints ─────────────────────────────────────────────────────────
 
+// ── Resume types ──────────────────────────────────────────────────────────
+
+export interface ApiSkill {
+  name: string;
+  category: string;
+  evidence: string;
+}
+
+export interface ApiEducation {
+  qualification: string;
+  institution: string;
+  fieldOfStudy: string;
+  graduationYear: number | null;
+}
+
+export interface ApiExperience {
+  organization: string;
+  designation: string;
+  description: string;
+  startDate: string | null;
+  endDate: string | null;
+}
+
+export interface ApiProject {
+  name: string;
+  description: string;
+  technologies: string[];
+  achievements: string[];
+}
+
+export interface ApiCertification {
+  name: string;
+  issuer: string;
+  issueDate: string | null;
+}
+
+export interface ApiExtractedData {
+  skills: ApiSkill[];
+  education: ApiEducation[];
+  experience: ApiExperience[];
+  projects: ApiProject[];
+  certifications: ApiCertification[];
+}
+
+export interface ApiResume {
+  _id: string;
+  userId: string;
+  originalFileName: string;
+  fileType: "pdf" | "docx";
+  fileSize: number;
+  status: "uploaded" | "processing" | "completed" | "failed";
+  extractedData: ApiExtractedData | null;
+  processingError: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ── Resume API helpers ────────────────────────────────────────────────────
+
+export const resumesApi = {
+  /** POST /api/resumes — upload a resume file */
+  upload: async (token: string, file: File): Promise<{ success: boolean; data: ApiResume }> => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001";
+    const formData = new FormData();
+    formData.append("resume", file);
+
+    const res = await fetch(`${baseUrl}/api/resumes`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+
+    const data = await res.json().catch(() => ({})) as { success: boolean; data: ApiResume; message?: string };
+    if (!res.ok) throw new ApiError(res.status, data.message ?? res.statusText);
+    return data;
+  },
+
+  /** GET /api/resumes — list user's resumes */
+  list: (token: string) =>
+    request<{ success: boolean; data: ApiResume[] }>("/api/resumes", token),
+
+  /** GET /api/resumes/:id */
+  getById: (token: string, id: string) =>
+    request<{ success: boolean; data: ApiResume }>(`/api/resumes/${id}`, token),
+
+  /** DELETE /api/resumes/:id */
+  delete: (token: string, id: string) =>
+    request<{ success: boolean; message: string }>(`/api/resumes/${id}`, token, {
+      method: "DELETE",
+    }),
+
+  /** POST /api/resumes/:id/reprocess */
+  reprocess: (token: string, id: string) =>
+    request<{ success: boolean; message: string }>(`/api/resumes/${id}/reprocess`, token, {
+      method: "POST",
+    }),
+};
+
 export const usersApi = {
   /** GET /api/users/me — fetch the signed-in user's profile */
   getMe: (token: string) =>

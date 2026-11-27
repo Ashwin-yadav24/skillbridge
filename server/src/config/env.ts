@@ -12,4 +12,5 @@ export const env = {
   // Clerk — read by @clerk/express automatically from process.env
   // CLERK_SECRET_KEY must be set in .env (never committed)
   CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY || "",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || "",
 } as const;

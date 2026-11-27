@@ -7,6 +7,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { env } from "./config/env";
 import healthRouter from "./routes/health";
 import usersRouter from "./routes/users";
+import resumesRouter from "./routes/resumes";
 import { notFoundHandler, globalErrorHandler } from "./middleware/errorHandler";
 
 const app = express();
@@ -42,6 +43,7 @@ app.use(express.urlencoded({ extended: true }));
 // --------------- Routes ---------------
 app.use("/api/health", healthRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/resumes", resumesRouter);
 
 // --------------- Error handling ---------------
 app.use(notFoundHandler);
