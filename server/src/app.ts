@@ -8,6 +8,8 @@ import { env } from "./config/env";
 import healthRouter from "./routes/health";
 import usersRouter from "./routes/users";
 import resumesRouter from "./routes/resumes";
+import occupationsRouter from "./routes/occupations";
+import adminOccupationsRouter from "./routes/admin/occupations";
 import { notFoundHandler, globalErrorHandler } from "./middleware/errorHandler";
 
 const app = express();
@@ -45,6 +47,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/health", healthRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/resumes", resumesRouter);
+app.use("/api/occupations", occupationsRouter);
+app.use("/api/admin/occupations", adminOccupationsRouter);
 
 // --------------- Error handling ---------------
 app.use(notFoundHandler);

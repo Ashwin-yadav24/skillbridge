@@ -191,14 +191,23 @@ export async function extractResumeData(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function callGemini(client: any, prompt: string): Promise<string> {
   const response = await client.models.generateContent({
-    model: "gemini-3.8-flash",
+    model: "gemini-4-hydrogen",
     contents: prompt,
     config: {
       temperature: 0.1,   // Low temperature for deterministic extraction
       maxOutputTokens: 4096,
     },
   });
-  const text: string | undefined = response.text;
+
+  // Try SDK property first, then fall back to candidates array (new API format)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const raw = response as any;
+  const text: string =
+    (typeof raw.text === "string" && raw.text.length > 0 ? raw.text : null) ??
+    raw.candidates?.[0]?.content?.parts?.[0]?.text ??
+    raw.candidates?.[0]?.content?.parts?.map((p: any) => p.text ?? "").join("") ??
+    "";
+
   if (!text) throw new Error("Gemini returned an empty response.");
   return text;
 }

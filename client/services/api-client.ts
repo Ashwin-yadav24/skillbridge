@@ -178,6 +178,194 @@ export const resumesApi = {
     }),
 };
 
+// ── Occupation types ───────────────────────────────────────────────────────
+
+export interface ApiSector {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+export interface ApiSchemeAssociation {
+  schemeName: string;
+  schemeCode?: string;
+  evidenceUrl?: string;
+  verified: boolean;
+}
+
+export interface ApiOccupationSource {
+  name: string;
+  url?: string;
+  identifier?: string;
+  importedAt?: string;
+  verifiedAt?: string;
+}
+
+export interface ApiOccupation {
+  _id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  sector: ApiSector | string;
+  subSector?: string;
+  qualificationCode?: string;
+  qpCode?: string;
+  qualificationTitle?: string;
+  nsqfLevel?: number;
+  qualificationCriteria?: string;
+  minimumEducation?: string;
+  relatedCourses: string[];
+  schemeAssociations: ApiSchemeAssociation[];
+  sourceInformation: ApiOccupationSource;
+  verificationStatus: "demo" | "imported" | "verified" | "pending";
+  lastVerifiedAt?: string;
+  isActive: boolean;
+  competencyCount?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiOccupationSkill {
+  _id: string;
+  occupationId: string;
+  skillId: {
+    _id: string;
+    name: string;
+    category: string;
+    description?: string;
+    normalizedName: string;
+  };
+  competencyDescription?: string;
+  importanceWeight: number;
+  proficiencyExpectation: "beginner" | "intermediate" | "advanced" | "expert";
+  mandatory: boolean;
+  sourceReference?: string;
+}
+
+export interface ApiPagination {
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+}
+
+export interface OccupationListResponse {
+  success: boolean;
+  data: ApiOccupation[];
+  pagination: ApiPagination;
+}
+
+// ── Occupation API helpers ─────────────────────────────────────────────────
+
+export const occupationsApi = {
+  /** GET /api/occupations — list with optional filters */
+  list: (params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<OccupationListResponse>(`/api/occupations${qs}`, null);
+  },
+
+  /** GET /api/occupations/sectors — available sectors */
+  getSectors: () =>
+    request<{ success: boolean; data: ApiSector[] }>("/api/occupations/sectors", null),
+
+  /** GET /api/occupations/:id — single occupation */
+  getById: (id: string) =>
+    request<{ success: boolean; data: ApiOccupation }>(`/api/occupations/${id}`, null),
+
+  /** GET /api/occupations/:id/skills — competencies */
+  getSkills: (id: string) =>
+    request<{ success: boolean; data: ApiOccupationSkill[] }>(
+      `/api/occupations/${id}/skills`,
+      null
+    ),
+};
+
+// ── Admin occupation API helpers ───────────────────────────────────────────
+
+export const adminOccupationsApi = {
+  list: (token: string, params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<OccupationListResponse>(`/api/admin/occupations${qs}`, token);
+  },
+
+  create: (token: string, body: Partial<ApiOccupation>) =>
+    request<{ success: boolean; data: ApiOccupation }>("/api/admin/occupations", token, {
+      method: "POST",
+      body,
+    }),
+
+  update: (token: string, id: string, body: Partial<ApiOccupation>) =>
+    request<{ success: boolean; data: ApiOccupation }>(
+      `/api/admin/occupations/${id}`,
+      token,
+      { method: "PATCH", body }
+    ),
+
+  deactivate: (token: string, id: string) =>
+    request<{ success: boolean; message: string }>(
+      `/api/admin/occupations/${id}`,
+      token,
+      { method: "DELETE" }
+    ),
+
+  import: async (
+    token: string,
+    file: File,
+    preview = false
+  ): Promise<{ success: boolean; dryRun: boolean; data: unknown }> => {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001";
+    const formData = new FormData();
+    formData.append("file", file);
+    const url = `${baseUrl}/api/admin/occupations/import${preview ? "?preview=true" : ""}`;
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+    const data = await res.json().catch(() => ({})) as {
+      success: boolean;
+      dryRun: boolean;
+      data: unknown;
+      message?: string;
+    };
+    if (!res.ok) throw new ApiError(res.status, data.message ?? res.statusText);
+    return data;
+  },
+
+  getImportHistory: (token: string, params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ success: boolean; data: unknown[]; pagination: ApiPagination }>(
+      `/api/admin/import-history${qs}`,
+      token
+    );
+  },
+
+  listSkills: (token: string, params?: Record<string, string>) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ success: boolean; data: unknown[]; pagination: ApiPagination }>(
+      `/api/admin/occupations/skills${qs}`,
+      token
+    );
+  },
+
+  mapSkill: (
+    token: string,
+    occupationId: string,
+    body: {
+      skillId: string;
+      mandatory?: boolean;
+      proficiencyExpectation?: string;
+      importanceWeight?: number;
+      competencyDescription?: string;
+    }
+  ) =>
+    request<{ success: boolean; data: unknown }>(
+      `/api/admin/occupations/${occupationId}/skills`,
+      token,
+      { method: "POST", body }
+    ),
+};
+
 export const usersApi = {
   /** GET /api/users/me — fetch the signed-in user's profile */
   getMe: (token: string) =>

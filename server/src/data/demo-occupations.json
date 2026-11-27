@@ -1,0 +1,162 @@
+[
+  {
+    "_demo_notice": "DEMO DATA — Not official NSDC/NQR/SIDH records. QP codes shown are illustrative placeholders only.",
+    "sector": "IT-ITeS",
+    "occupations": [
+      {
+        "title": "Full Stack Web Developer",
+        "slug": "full-stack-web-developer",
+        "description": "Designs, builds and maintains web applications using front-end and back-end technologies. Responsible for the complete software lifecycle from requirements gathering through deployment and monitoring.",
+        "subSector": "Software Development",
+        "nsqfLevel": 7,
+        "minimumEducation": "10+2 or equivalent",
+        "qualificationCriteria": "Candidates must demonstrate proficiency in at least one front-end framework, one back-end runtime, and basic database operations.",
+        "skills": [
+          { "name": "HTML5 & CSS3", "category": "Frontend", "mandatory": true, "proficiency": "advanced", "weight": 0.9, "description": "Build semantic, accessible, and responsive web interfaces" },
+          { "name": "JavaScript / TypeScript", "category": "Programming", "mandatory": true, "proficiency": "advanced", "weight": 0.95, "description": "Client-side and server-side logic implementation" },
+          { "name": "React.js", "category": "Frontend Framework", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Component-based single-page application development" },
+          { "name": "Node.js", "category": "Backend", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Scalable server-side application development" },
+          { "name": "RESTful APIs", "category": "Backend", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Design, build and consume REST APIs" },
+          { "name": "MongoDB / SQL Databases", "category": "Database", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Design and query relational and document databases" },
+          { "name": "Git Version Control", "category": "DevOps", "mandatory": true, "proficiency": "intermediate", "weight": 0.75, "description": "Code versioning and team collaboration" },
+          { "name": "Cloud Deployment", "category": "DevOps", "mandatory": false, "proficiency": "beginner", "weight": 0.5, "description": "Deploy applications to cloud platforms" }
+        ]
+      },
+      {
+        "title": "Data Analyst",
+        "slug": "data-analyst",
+        "description": "Collects, processes and interprets large datasets to support business decisions. Uses statistical tools, visualisation libraries and BI platforms to communicate insights.",
+        "subSector": "Data Science & Analytics",
+        "nsqfLevel": 6,
+        "minimumEducation": "Graduate in any stream",
+        "qualificationCriteria": "Proficiency in SQL and at least one analytics tool (Python, R, or Power BI) is required.",
+        "skills": [
+          { "name": "Python for Data Analysis", "category": "Programming", "mandatory": true, "proficiency": "intermediate", "weight": 0.9, "description": "Data analysis using Python and libraries like pandas, NumPy" },
+          { "name": "SQL", "category": "Database", "mandatory": true, "proficiency": "advanced", "weight": 0.9, "description": "Query and manipulate relational databases" },
+          { "name": "Data Visualization", "category": "Analytics", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Create charts and dashboards using matplotlib, seaborn, or BI tools" },
+          { "name": "Statistics & Probability", "category": "Analytics", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Apply descriptive and inferential statistics" },
+          { "name": "Excel / Google Sheets", "category": "Productivity", "mandatory": true, "proficiency": "advanced", "weight": 0.7, "description": "Advanced spreadsheet analysis and pivot tables" },
+          { "name": "Power BI / Tableau", "category": "BI Tools", "mandatory": false, "proficiency": "beginner", "weight": 0.6, "description": "Build business intelligence dashboards" }
+        ]
+      },
+      {
+        "title": "Cybersecurity Analyst",
+        "slug": "cybersecurity-analyst",
+        "description": "Monitors IT infrastructure for security threats, investigates incidents, and implements defensive controls to protect digital assets from unauthorised access and attacks.",
+        "subSector": "Information Security",
+        "nsqfLevel": 7,
+        "minimumEducation": "Graduate in CS / IT or equivalent",
+        "qualificationCriteria": "Must demonstrate knowledge of network security fundamentals, common attack vectors, and incident response procedures.",
+        "skills": [
+          { "name": "Network Security Fundamentals", "category": "Security", "mandatory": true, "proficiency": "advanced", "weight": 0.95, "description": "TCP/IP, firewalls, IDS/IPS, VPNs" },
+          { "name": "Ethical Hacking & Penetration Testing", "category": "Security", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Identify and exploit vulnerabilities safely" },
+          { "name": "SIEM & Log Analysis", "category": "Security Operations", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Security event correlation and log forensics" },
+          { "name": "Incident Response", "category": "Security Operations", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Identify, contain, and recover from security incidents" },
+          { "name": "Linux Administration", "category": "Systems", "mandatory": true, "proficiency": "intermediate", "weight": 0.75, "description": "Manage and harden Linux-based systems" },
+          { "name": "Cryptography Basics", "category": "Security", "mandatory": false, "proficiency": "beginner", "weight": 0.5, "description": "Encryption, hashing, PKI concepts" }
+        ]
+      }
+    ]
+  },
+  {
+    "_demo_notice": "DEMO DATA — Not official NSDC/NQR/SIDH records.",
+    "sector": "Healthcare",
+    "occupations": [
+      {
+        "title": "General Duty Assistant (GDA)",
+        "slug": "general-duty-assistant",
+        "description": "Provides basic care and support to patients under nursing supervision in hospitals and clinical settings. Assists with activities of daily living, patient hygiene, and ward operations.",
+        "subSector": "Clinical Care Support",
+        "nsqfLevel": 4,
+        "minimumEducation": "Class 10 pass",
+        "qualificationCriteria": "Completion of an accredited GDA training programme is required. Physical fitness standards apply.",
+        "skills": [
+          { "name": "Patient Care & Hygiene", "category": "Clinical", "mandatory": true, "proficiency": "intermediate", "weight": 0.95, "description": "Assist patients with bathing, grooming, and personal hygiene" },
+          { "name": "Vital Signs Monitoring", "category": "Clinical", "mandatory": true, "proficiency": "intermediate", "weight": 0.9, "description": "Measure and record temperature, pulse, blood pressure, SpO2" },
+          { "name": "Infection Prevention & Control", "category": "Clinical", "mandatory": true, "proficiency": "advanced", "weight": 0.9, "description": "Hand hygiene, PPE use, waste disposal protocols" },
+          { "name": "Patient Mobility Support", "category": "Clinical", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Safe patient transfers, repositioning, wheelchair assistance" },
+          { "name": "Medical Terminology", "category": "Healthcare Knowledge", "mandatory": false, "proficiency": "beginner", "weight": 0.5, "description": "Common medical terms used in clinical documentation" }
+        ]
+      },
+      {
+        "title": "Phlebotomist",
+        "slug": "phlebotomist",
+        "description": "Collects blood and other specimens from patients for laboratory testing. Ensures correct labelling, handling, and transport of samples while maintaining patient comfort and safety.",
+        "subSector": "Diagnostics & Laboratory",
+        "nsqfLevel": 5,
+        "minimumEducation": "Class 12 with Science",
+        "qualificationCriteria": "Minimum 300 hours of supervised phlebotomy practice required.",
+        "skills": [
+          { "name": "Venipuncture Technique", "category": "Clinical Skill", "mandatory": true, "proficiency": "expert", "weight": 1.0, "description": "Safe and accurate blood collection from peripheral veins" },
+          { "name": "Infection Prevention & Control", "category": "Clinical", "mandatory": true, "proficiency": "advanced", "weight": 0.95, "description": "Needle-stick prevention, sharps disposal, PPE" },
+          { "name": "Specimen Handling & Labelling", "category": "Laboratory", "mandatory": true, "proficiency": "advanced", "weight": 0.9, "description": "Correct tube selection, labelling accuracy, cold chain" },
+          { "name": "Patient Communication", "category": "Soft Skills", "mandatory": true, "proficiency": "intermediate", "weight": 0.7, "description": "Explain procedure, manage patient anxiety" }
+        ]
+      }
+    ]
+  },
+  {
+    "_demo_notice": "DEMO DATA — Not official NSDC/NQR/SIDH records.",
+    "sector": "Retail",
+    "occupations": [
+      {
+        "title": "Retail Sales Associate",
+        "slug": "retail-sales-associate",
+        "description": "Assists customers in selecting and purchasing products, maintains store presentation, handles point-of-sale transactions, and contributes to store targets.",
+        "subSector": "Modern Retail",
+        "nsqfLevel": 4,
+        "minimumEducation": "Class 10 pass",
+        "qualificationCriteria": "Must complete basic customer service and retail operations training.",
+        "skills": [
+          { "name": "Customer Service", "category": "Soft Skills", "mandatory": true, "proficiency": "intermediate", "weight": 0.95, "description": "Greet, assist, and retain customers effectively" },
+          { "name": "Product Knowledge", "category": "Retail", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Understand store categories and advise customers" },
+          { "name": "POS Operations", "category": "Retail Technology", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Operate point-of-sale systems, process payments" },
+          { "name": "Visual Merchandising Basics", "category": "Retail", "mandatory": false, "proficiency": "beginner", "weight": 0.5, "description": "Product display and planogram adherence" }
+        ]
+      }
+    ]
+  },
+  {
+    "_demo_notice": "DEMO DATA — Not official NSDC/NQR/SIDH records.",
+    "sector": "Logistics",
+    "occupations": [
+      {
+        "title": "Warehouse Picker & Packer",
+        "slug": "warehouse-picker-packer",
+        "description": "Picks orders from warehouse locations, packs goods to specification, and prepares shipments for dispatch. Maintains inventory accuracy and workspace safety.",
+        "subSector": "Warehousing & Storage",
+        "nsqfLevel": 3,
+        "minimumEducation": "Class 8 pass",
+        "qualificationCriteria": "Physical fitness and basic literacy in English/regional language required.",
+        "skills": [
+          { "name": "Order Picking Accuracy", "category": "Warehousing", "mandatory": true, "proficiency": "intermediate", "weight": 0.95, "description": "Locate, pick, and verify items against pick lists" },
+          { "name": "Packing & Labelling", "category": "Warehousing", "mandatory": true, "proficiency": "intermediate", "weight": 0.9, "description": "Pack goods to specification and apply shipping labels" },
+          { "name": "Inventory Management Basics", "category": "Warehousing", "mandatory": true, "proficiency": "beginner", "weight": 0.7, "description": "Stock counts, discrepancy reporting" },
+          { "name": "Workplace Safety (5S)", "category": "Safety", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Sort, Set, Shine, Standardise, Sustain practices" }
+        ]
+      }
+    ]
+  },
+  {
+    "_demo_notice": "DEMO DATA — Not official NSDC/NQR/SIDH records.",
+    "sector": "Beauty & Wellness",
+    "occupations": [
+      {
+        "title": "Hair Stylist",
+        "slug": "hair-stylist",
+        "description": "Provides hair care services including cutting, colouring, styling and chemical treatments. Advises clients on hair care routines and style options.",
+        "subSector": "Salon & Spa Services",
+        "nsqfLevel": 4,
+        "minimumEducation": "Class 10 pass",
+        "qualificationCriteria": "Must complete an accredited hair & beauty training programme of minimum 6 months.",
+        "skills": [
+          { "name": "Hair Cutting Techniques", "category": "Hair Services", "mandatory": true, "proficiency": "advanced", "weight": 0.95, "description": "Layering, graduation, precision cutting" },
+          { "name": "Hair Colouring & Chemical Treatments", "category": "Hair Services", "mandatory": true, "proficiency": "intermediate", "weight": 0.85, "description": "Colour application, bleaching, relaxing, perming" },
+          { "name": "Hair Styling & Finishing", "category": "Hair Services", "mandatory": true, "proficiency": "intermediate", "weight": 0.8, "description": "Blow-dry, iron styling, updos" },
+          { "name": "Hygiene & Salon Safety", "category": "Professional Standards", "mandatory": true, "proficiency": "advanced", "weight": 0.9, "description": "Tool sterilisation, chemical safety, PPE" },
+          { "name": "Client Consultation", "category": "Soft Skills", "mandatory": false, "proficiency": "intermediate", "weight": 0.65, "description": "Understand client needs, recommend services" }
+        ]
+      }
+    ]
+  }
+]

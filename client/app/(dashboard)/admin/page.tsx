@@ -8,63 +8,71 @@ import {
   Shield,
   Lock,
 } from "lucide-react";
+import Link from "next/link";
 import { PageHeader } from "@/components/shared/page-header";
 import { StatusBadge } from "@/components/shared/status-badge";
 
-const ADMIN_MODULES = [
+const ADMIN_MODULES: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  colorClass: string;
+  phase: string;
+  href: string | null;
+}[] = [
   {
     icon: <Users className="w-6 h-6" />,
     title: "User Management",
     description:
       "View, search, and manage registered students. Review profiles, reset passwords, and monitor usage.",
-    color: "blue" as const,
     colorClass: "bg-[var(--sb-blue)]/10 text-[var(--sb-blue)] border-[var(--sb-blue)]/30",
     phase: "Phase 10",
+    href: null,
   },
   {
     icon: <Briefcase className="w-6 h-6" />,
     title: "Occupation Management",
     description:
-      "Add, edit and curate occupation listings, competency frameworks and NSQF level mappings.",
-    color: "purple" as const,
+      "Add, edit and curate occupation listings, competency frameworks, NSQF level mappings, and import official datasets.",
     colorClass: "bg-[var(--sb-purple)]/10 text-[var(--sb-purple)] border-[var(--sb-purple)]/30",
-    phase: "Phase 10",
+    phase: "Phase 5 ✓",
+    href: "/admin/occupations",
   },
   {
     icon: <BookOpen className="w-6 h-6" />,
     title: "Course Management",
     description:
       "Manage PMKVY training programmes, provider details, enrolment data, and batch information.",
-    color: "green" as const,
     colorClass: "bg-[var(--sb-green)]/10 text-[var(--sb-green)] border-[var(--sb-green)]/30",
     phase: "Phase 10",
+    href: null,
   },
   {
     icon: <MapPin className="w-6 h-6" />,
     title: "Centre Management",
     description:
       "Maintain training centre records, geolocation data, approval status, and capacity information.",
-    color: "orange" as const,
     colorClass: "bg-[var(--sb-orange)]/10 text-[var(--sb-orange)] border-[var(--sb-orange)]/30",
     phase: "Phase 10",
+    href: null,
   },
   {
     icon: <BarChart3 className="w-6 h-6" />,
     title: "Analytics & Reports",
     description:
       "Platform usage statistics, skill-gap trends, course completion rates, and placement outcomes.",
-    color: "blue" as const,
     colorClass: "bg-[var(--sb-blue)]/10 text-[var(--sb-blue)] border-[var(--sb-blue)]/30",
     phase: "Phase 11",
+    href: null,
   },
   {
     icon: <Settings className="w-6 h-6" />,
     title: "System Configuration",
     description:
       "API keys, AI model settings, rate limits, feature flags and notification templates.",
-    color: "purple" as const,
     colorClass: "bg-[var(--sb-purple)]/10 text-[var(--sb-purple)] border-[var(--sb-purple)]/30",
     phase: "Phase 11",
+    href: null,
   },
 ];
 
@@ -86,8 +94,7 @@ export default function AdminPage() {
             Admin Authorization Required
           </p>
           <p className="text-xs text-[var(--sb-secondary-text)] mt-0.5">
-            This area is restricted to authorized administrators only. Full access control and
-            role-based permissions will be enforced in Phase 10. Currently showing UI placeholder.
+            This area is restricted to authorized administrators. Admin role is enforced server-side via MongoDB — the server never trusts client-provided role claims.
           </p>
         </div>
       </div>
@@ -99,7 +106,7 @@ export default function AdminPage() {
         actions={
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-[var(--sb-orange)]" />
-            <StatusBadge status="warning" label="Coming in Phase 10" />
+            <StatusBadge status="warning" label="Restricted Access" />
           </div>
         }
       />
@@ -129,16 +136,14 @@ export default function AdminPage() {
           {ADMIN_MODULES.map((mod) => (
             <div
               key={mod.title}
-              className="bg-white border-2 border-[var(--sb-navy)] rounded-xl shadow-navy-sm p-6 flex flex-col gap-4 opacity-80"
+              className={`bg-white border-2 border-[var(--sb-navy)] rounded-xl shadow-navy-sm p-6 flex flex-col gap-4 ${mod.href ? "" : "opacity-70"}`}
             >
               {/* Icon + badge */}
               <div className="flex items-start justify-between">
-                <div
-                  className={`w-12 h-12 rounded-xl border flex items-center justify-center ${mod.colorClass}`}
-                >
+                <div className={`w-12 h-12 rounded-xl border flex items-center justify-center ${mod.colorClass}`}>
                   {mod.icon}
                 </div>
-                <span className="label-tech text-[10px] text-[var(--sb-secondary-text)] bg-gray-100 border border-gray-200 px-2 py-0.5 rounded-full">
+                <span className={`label-tech text-[10px] px-2 py-0.5 rounded-full border ${mod.href ? "bg-[var(--sb-green)]/10 text-[var(--sb-green)] border-[var(--sb-green)]/30" : "text-[var(--sb-secondary-text)] bg-gray-100 border-gray-200"}`}>
                   {mod.phase}
                 </span>
               </div>
@@ -151,14 +156,23 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              {/* Disabled button */}
-              <button
-                disabled
-                className="mt-auto flex items-center justify-center gap-2 py-2.5 px-4 bg-gray-100 text-gray-400 font-semibold rounded-xl border-2 border-gray-200 cursor-not-allowed text-sm"
-              >
-                <Lock className="w-4 h-4" />
-                Not Available Yet
-              </button>
+              {/* Button */}
+              {mod.href ? (
+                <Link
+                  href={mod.href}
+                  className="mt-auto flex items-center justify-center gap-2 py-2.5 px-4 bg-[var(--sb-blue)] text-white font-bold rounded-xl border-2 border-[var(--sb-navy)] shadow-navy-sm hover:bg-[var(--sb-blue-hover)] text-sm transition-colors"
+                >
+                  Open Module
+                </Link>
+              ) : (
+                <button
+                  disabled
+                  className="mt-auto flex items-center justify-center gap-2 py-2.5 px-4 bg-gray-100 text-gray-400 font-semibold rounded-xl border-2 border-gray-200 cursor-not-allowed text-sm"
+                >
+                  <Lock className="w-4 h-4" />
+                  Not Available Yet
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -173,9 +187,9 @@ export default function AdminPage() {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { phase: "Phase 10", label: "Admin CRUD APIs", status: "Upcoming" },
+            { phase: "Phase 5 ✓", label: "Occupation Catalogue", status: "Live" },
+            { phase: "Phase 10", label: "Full Admin CRUD", status: "Upcoming" },
             { phase: "Phase 11", label: "Analytics & Reports", status: "Upcoming" },
-            { phase: "Phase 12", label: "Role-based Access Control", status: "Upcoming" },
           ].map((item) => (
             <div key={item.phase} className="bg-white/5 border border-white/10 rounded-xl p-4">
               <div className="label-tech text-xs text-[var(--sb-blue)] mb-1">{item.phase}</div>
