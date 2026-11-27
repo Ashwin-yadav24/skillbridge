@@ -12,7 +12,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-require-imports */
-// pdf-parse ships with a CJS entrypoint; use require() to avoid ESM compat issues
+// pdf-parse v1.1.1 — exports a direct function (CJS compatible)
 const pdfParse = require("pdf-parse") as (
   buffer: Buffer,
   options?: { max?: number }

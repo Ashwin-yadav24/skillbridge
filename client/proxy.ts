@@ -1,7 +1,7 @@
 /**
- * SkillBridge AI — Clerk Authentication Middleware
+ * SkillBridge AI — Clerk Authentication Proxy
  *
- * Next.js 15/16 uses middleware.ts (not proxy.ts).
+ * Next.js 16+ uses proxy.ts (replaces the deprecated middleware.ts).
  * @clerk/nextjs v7 — clerkMiddleware + createRouteMatcher API.
  *
  * PUBLIC routes: accessible without a session.

@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
     ppr: false,
   },
   turbopack: {
+    // Set root to the client directory to suppress the multiple lockfiles warning
+    root: __dirname,
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],

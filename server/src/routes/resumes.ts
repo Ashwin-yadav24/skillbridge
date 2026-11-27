@@ -56,7 +56,8 @@ const upload = multer({
 
 const uploadLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,
+  max: process.env.NODE_ENV === "development" ? 1000 : 10,
+  skip: () => process.env.NODE_ENV === "development",
   message: { success: false, message: "Too many uploads. Please wait before trying again." },
   standardHeaders: true,
   legacyHeaders: false,
@@ -64,7 +65,8 @@ const uploadLimiter = rateLimit({
 
 const reprocessLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: process.env.NODE_ENV === "development" ? 1000 : 5,
+  skip: () => process.env.NODE_ENV === "development",
   message: { success: false, message: "Too many reprocess requests. Please wait." },
   standardHeaders: true,
   legacyHeaders: false,

@@ -191,7 +191,7 @@ export async function extractResumeData(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function callGemini(client: any, prompt: string): Promise<string> {
   const response = await client.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-3.8-flash",
     contents: prompt,
     config: {
       temperature: 0.1,   // Low temperature for deterministic extraction
