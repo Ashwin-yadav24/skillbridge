@@ -125,6 +125,34 @@ Return only the JSON object. No markdown. No explanation.`;
 
 const TIMEOUT_MS = 60_000;
 const MAX_RETRIES = 2;
+const MODEL_CANDIDATES = [
+  "gemini-4-hydrogen",
+  "gemini-3.8-flash",
+  "gemini-3.7-flash",
+];
+
+function parseJsonResponse(responseText: string): unknown {
+  const cleaned = responseText
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // Fallback: extract outermost JSON object if extra prose surrounded it
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
+    if (start !== -1 && end > start) {
+      try {
+        return JSON.parse(cleaned.slice(start, end + 1));
+      } catch {
+        // fall through
+      }
+    }
+    throw new Error("Gemini returned non-JSON response.");
+  }
+}
 
 export async function extractResumeData(
   resumeText: string
@@ -135,10 +163,11 @@ export async function extractResumeData(
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    const model = MODEL_CANDIDATES[Math.min(attempt, MODEL_CANDIDATES.length - 1)];
     try {
       // Race the API call against a timeout
       const responseText = await Promise.race([
-        callGemini(client, prompt),
+        callGemini(client, prompt, model),
         new Promise<never>((_, reject) =>
           setTimeout(
             () => reject(new Error(`Gemini API timed out after ${TIMEOUT_MS / 1000}s`)),
@@ -147,18 +176,7 @@ export async function extractResumeData(
         ),
       ]);
 
-      // Strip markdown code fences if Gemini wraps in ```json
-      const cleaned = responseText
-        .replace(/^```(?:json)?\s*/i, "")
-        .replace(/\s*```$/i, "")
-        .trim();
-
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(cleaned);
-      } catch {
-        throw new Error("Gemini returned non-JSON response.");
-      }
+      const parsed = parseJsonResponse(responseText);
 
       // Validate with Zod
       const validated = ExtractedDataSchema.safeParse(parsed);
@@ -175,13 +193,15 @@ export async function extractResumeData(
       const isRetryable =
         lastError.message.includes("timed out") ||
         lastError.message.includes("503") ||
-        lastError.message.includes("overloaded");
+        lastError.message.includes("UNAVAILABLE") ||
+        lastError.message.includes("overloaded") ||
+        lastError.message.includes("non-JSON");
 
       if (!isRetryable || attempt === MAX_RETRIES) break;
 
       // Exponential back-off: 2s, 4s
       await new Promise((r) => setTimeout(r, 1000 * 2 ** (attempt + 1)));
-      console.log(`[Gemini] Retrying (attempt ${attempt + 2})…`);
+      console.log(`[Gemini] Attempt ${attempt + 1} (${model}) failed: ${lastError.message.slice(0, 120)}. Retrying (attempt ${attempt + 2})…`);
     }
   }
 
@@ -189,13 +209,14 @@ export async function extractResumeData(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function callGemini(client: any, prompt: string): Promise<string> {
+async function callGemini(client: any, prompt: string, model: string): Promise<string> {
   const response = await client.models.generateContent({
-    model: "gemini-4-hydrogen",
+    model,
     contents: prompt,
     config: {
       temperature: 0.1,   // Low temperature for deterministic extraction
       maxOutputTokens: 4096,
+      responseMimeType: "application/json",
     },
   });
 
